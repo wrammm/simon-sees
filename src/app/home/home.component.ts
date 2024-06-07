@@ -1,24 +1,28 @@
 import { Component, Input } from '@angular/core';
-import { Value } from '../interfaces/value';
+import { MatButtonModule } from '@angular/material/button';
+import { Router, RouterLink } from '@angular/router';
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { Level } from '../interfaces/level';
+import { PlayService } from '../services/play.service';
 
 @Component({
   selector: 'home',
   standalone: true,
-  imports: [],
+  imports: [MatButtonModule, FormsModule, MatFormFieldModule, MatSelectModule, MatInputModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
-  @Input({ required: true }) value: Value = 'CAT';
-  constructor() {
-    console.log('value from constructor: ', this.value);
-  }
+  levels: Level[] = ['Easy', 'Medium', 'Hard', 'Expert'];
+  selectedLevel: Level = 'Easy';
 
-  public testPublic() {
-    console.log('Test public');
-  }
+  constructor(private playService: PlayService, private router: Router){}
 
-  protected test() {
-    console.log('Test');
+  protected play() {
+    this.playService.setDifficulty(this.selectedLevel);
+    this.router.navigateByUrl('/play');
   }
 }

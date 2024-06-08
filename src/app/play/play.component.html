@@ -1,3 +1,23 @@
-<div>
-    <label>{{difficulty}} mode</label>
+<div class="container">
+  <div class="display-container">
+    <!-- <label>Mode: {{ difficulty }}</label>
+    <br />
+    <label>Theme: {{ theme }}</label> -->
+    @if (showImageDisplay && showIconDisplay) {
+    <image-display [icon]="displayIcon!.icon" />
+    } @else if (!showImageDisplay) {
+    <div class="play">
+      <button mat-flat-button color="primary" (click)="play()">Start</button>
+    </div>
+    } @else if (showChooseSequenceDisplay) {
+    <div>Select Sequence</div>
+    }
+  </div>
+  @if (showChooseSequenceDisplay) {
+  <div class="buttons-container">
+    @for (icon of icons; track icon) {
+    <image-button [icon]="icon.icon" (click)="buttonSelected(icon)" />
+    }
+  </div>
+  }
 </div>

@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { ImageButtonComponent } from '../image-button/image-button.component';
 import { ImageDisplayComponent } from '../image-display/image-display.component';
 import { ThemeValue } from '../interfaces/theme';
-import { Icon } from '../interfaces/icon';
+import { Icon, IconColor } from '../interfaces/icon';
 import {
   animalIcons,
   foodAndDrinkIcons,
@@ -31,7 +31,12 @@ export class PlayComponent {
   showImageDisplay = false;
   showIconDisplay = false;
   timeInterval = 1000;
+  timeIntervalWhenSelected = 500;
   showChooseSequenceDisplay = false;
+  showSelectedIcon = false;
+  selectionIconColor: IconColor | null = null;
+  currentRoundSequence: Icon[] = [];
+  selectedIcon: Icon | null = null;
 
   constructor(private playService: PlayService, private router: Router) {}
 
@@ -58,15 +63,7 @@ export class PlayComponent {
   play() {
     this.showImageDisplay = true;
     this.playSequence();
-    // this.playService.getIconSequence().forEach(iconFromSequence => {
-    //   this.displayIcon = iconFromSequence;
-    //   setTimeout(() => {
-    //     this.showIconDisplay = true;
-    //     setTimeout(() => {
-    //       this.showIconDisplay = false;
-    //     }, this.timeInterval);
-    //   }, this.timeInterval);
-    // });
+    this.currentRoundSequence = this.playService.getIconSequenceClone();
   }
 
   playSequence(index = 0) {
@@ -113,6 +110,47 @@ export class PlayComponent {
   }
 
   buttonSelected(icon: Icon) {
-    console.log('buttonSelected: ', icon);
+    if (!this.showChooseSequenceDisplay) {
+      return;
+    }
+    this.selectedIcon = icon;
+    console.log('this.selectedIcon: ', this.selectedIcon);
+    if (icon === this.currentRoundSequence[0]) {
+      this.handleSelection(true);
+    } else {
+      this.handleSelection(false);
+    }
+  }
+
+  handleSelection(correct: boolean) {
+    console.log('currentRoundSequence: ', this.currentRoundSequence);
+    this.selectionIconColor = correct ? 'Green' : 'Red';
+    this.showSelectedIcon = true;
+    this.showChooseSequenceDisplay = false;
+    setTimeout(() => {
+      this.showSelectedIcon = false;
+      this.showChooseSequenceDisplay = true;
+      if (correct) {
+        this.currentRoundSequence.shift();
+        if (this.currentRoundSequence.length === 0) {
+          this.roundWin();
+        }
+      } else {
+        this.roundLoss();
+      }
+    }, this.timeIntervalWhenSelected);
+  }
+
+  roundWin() {
+    alert('Round win!');
+    this.playService.addRandomToIconSequence(this.icons);
+    this.showImageDisplay = false;
+    this.showIconDisplay = false;
+    this.showChooseSequenceDisplay = false;
+  }
+
+  roundLoss() {
+    alert('Incorrect');
+    this.router.navigateByUrl('/home');
   }
 }

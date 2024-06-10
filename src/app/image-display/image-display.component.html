@@ -2,6 +2,7 @@
   <mat-icon>{{ icon() }}</mat-icon>
 </button> -->
 <div>
-    <mat-icon>{{ icon() }}</mat-icon>
+    <mat-icon [ngClass]="{'green-icon': color() === 'Green', 'red-icon': color() === 'Red'}">{{ icon() }}</mat-icon>
+    <!-- , 'red-icon': color() === 'Red' -->
 </div>
 

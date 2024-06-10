@@ -31,6 +31,10 @@ export class PlayService {
     return this.iconSequence;
   }
 
+  getIconSequenceClone() {
+    return Object.assign([], this.iconSequence);
+  }
+
   resetIconSequence() {
     this.iconSequence = [];
   }

@@ -3,6 +3,9 @@
     <!-- <label>Mode: {{ difficulty }}</label>
     <br />
     <label>Theme: {{ theme }}</label> -->
+    @if (showSelectedIcon) {
+      <image-display [icon]="selectedIcon!.icon" [color]="selectionIconColor"/>
+      }
     @if (showImageDisplay && showIconDisplay) {
     <image-display [icon]="displayIcon!.icon" />
     } @else if (!showImageDisplay) {

@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { PlayService } from '../services/play.service';
-import { Level } from '../interfaces/level';
+import { Difficulty } from '../interfaces/difficulty';
 import { Router } from '@angular/router';
 import { ImageButtonComponent } from '../image-button/image-button.component';
 import { ImageDisplayComponent } from '../image-display/image-display.component';
 import { ThemeValue } from '../interfaces/theme';
 import { Icon, IconColor } from '../interfaces/icon';
 import {
-  animalIcons,
+  travelAndPlacesIcons,
   foodAndDrinkIcons,
   natureIcons,
   sportsIcons,
@@ -23,20 +23,19 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './play.component.scss',
 })
 export class PlayComponent {
-  difficulty: Level | null = null;
+  difficulty: Difficulty | null = null;
   theme: ThemeValue | null = null;
   icons: Icon[] = [];
   displayIcon: null | Icon = null;
-  amountInSequence = 3;
   showImageDisplay = false;
   showIconDisplay = false;
-  timeInterval = 1000;
   timeIntervalWhenSelected = 500;
   showChooseSequenceDisplay = false;
   showSelectedIcon = false;
   selectionIconColor: IconColor | null = null;
   currentRoundSequence: Icon[] = [];
   selectedIcon: Icon | null = null;
+  roundNumber = 1;
 
   constructor(private playService: PlayService, private router: Router) {}
 
@@ -45,19 +44,22 @@ export class PlayComponent {
     this.theme = this.playService.getTheme();
     if (!this.difficulty || !this.theme) {
       this.router.navigateByUrl('/home');
+    } else {
+      this.icons = this.getIcons(this.difficulty!.iconCount);
+      this.getDisplayIcon();
+      this.getInitialSequence();
     }
-    this.icons = this.getIcons();
-    this.getDisplayIcon();
-    this.getInitialSequence();
   }
 
   getInitialSequence() {
     this.playService.resetIconSequence();
-    for (let i = 0; i < this.amountInSequence; i++) {
-      console.log('addRandomToIconSequence');
+    this.addRandomsToSequence(this.difficulty!.initialAmountOfIcons);
+  }
+
+  addRandomsToSequence(amountOfIconsToAdd: number) {
+    for (let i = 0; i < amountOfIconsToAdd; i++) {
       this.playService.addRandomToIconSequence(this.icons);
     }
-    console.log('initial sequence: ', this.playService.getIconSequence());
   }
 
   play() {
@@ -67,7 +69,6 @@ export class PlayComponent {
   }
 
   playSequence(index = 0) {
-    console.log('playSequence: ', index);
     if (index < this.playService.getIconSequenceLength()) {
       this.displayIcon = this.playService.getIconSequence()[index];
       setTimeout(() => {
@@ -75,8 +76,8 @@ export class PlayComponent {
         setTimeout(() => {
           this.showIconDisplay = false;
           this.playSequence(index + 1);
-        }, this.timeInterval);
-      }, this.timeInterval);
+        }, this.difficulty?.flickerSpeedMs);
+      }, this.difficulty?.flickerSpeedMs);
     } else {
       this.showChooseSequenceDisplay = true;
     }
@@ -86,25 +87,25 @@ export class PlayComponent {
     this.displayIcon = this.icons[0];
   }
 
-  private getIcons() {
+  private getIcons(numberOfIcons: number) {
     switch (this.theme) {
-      case 'Animal': {
-        return animalIcons;
+      case 'Travel': {
+        return travelAndPlacesIcons.slice(0, numberOfIcons);
       }
       case 'Food': {
-        return foodAndDrinkIcons;
+        return foodAndDrinkIcons.slice(0, numberOfIcons);
       }
       case 'Nature': {
-        return natureIcons;
+        return natureIcons.slice(0, numberOfIcons);
       }
       case 'Sports': {
-        return sportsIcons;
+        return sportsIcons.slice(0, numberOfIcons);
       }
       case 'Tech': {
-        return techIcons;
+        return techIcons.slice(0, numberOfIcons);
       }
       default: {
-        return animalIcons;
+        return travelAndPlacesIcons.slice(0, numberOfIcons);
       }
     }
   }
@@ -114,7 +115,6 @@ export class PlayComponent {
       return;
     }
     this.selectedIcon = icon;
-    console.log('this.selectedIcon: ', this.selectedIcon);
     if (icon === this.currentRoundSequence[0]) {
       this.handleSelection(true);
     } else {
@@ -123,7 +123,6 @@ export class PlayComponent {
   }
 
   handleSelection(correct: boolean) {
-    console.log('currentRoundSequence: ', this.currentRoundSequence);
     this.selectionIconColor = correct ? 'Green' : 'Red';
     this.showSelectedIcon = true;
     this.showChooseSequenceDisplay = false;
@@ -142,15 +141,15 @@ export class PlayComponent {
   }
 
   roundWin() {
-    alert('Round win!');
-    this.playService.addRandomToIconSequence(this.icons);
+    this.roundNumber++;
+    this.addRandomsToSequence(this.difficulty!.iconRoundIncrement);
     this.showImageDisplay = false;
     this.showIconDisplay = false;
     this.showChooseSequenceDisplay = false;
   }
 
   roundLoss() {
-    alert('Incorrect');
+    alert('Incorrect selection (💀 on round ' + this.roundNumber + ')');
     this.router.navigateByUrl('/home');
   }
 }

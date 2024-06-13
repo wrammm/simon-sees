@@ -5,9 +5,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Level } from '../interfaces/level';
+import { Difficulty } from '../interfaces/difficulty';
 import { PlayService } from '../services/play.service';
 import { ThemeValue, Theme } from '../interfaces/theme';
+import { Levels } from '../data/difficulties';
 
 @Component({
   selector: 'home',
@@ -23,11 +24,11 @@ import { ThemeValue, Theme } from '../interfaces/theme';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
-  levels: Level[] = ['Easy', 'Medium', 'Hard', 'Expert'];
-  selectedLevel: Level = 'Easy';
+  levels: Difficulty[] = Levels;
+  selectedLevel: Difficulty = this.levels[0];
 
   themes: Theme[] = [
-    { value: 'Animal', displayValue: 'Animal' },
+    { value: 'Travel', displayValue: 'Travel' },
     { value: 'Food', displayValue: 'Food and Drinks' },
     { value: 'Nature', displayValue: 'Nature' },
     { value: 'Sports', displayValue: 'Sports' },

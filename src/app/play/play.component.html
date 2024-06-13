@@ -10,6 +10,7 @@
     <image-display [icon]="displayIcon!.icon" />
     } @else if (!showImageDisplay) {
     <div class="play">
+      <h2 class="roundDisplay">Round {{roundNumber}}</h2>
       <button mat-flat-button color="primary" (click)="play()">Start</button>
     </div>
     } @else if (showChooseSequenceDisplay) {
@@ -19,7 +20,7 @@
   @if (showChooseSequenceDisplay) {
   <div class="buttons-container">
     @for (icon of icons; track icon) {
-    <image-button [icon]="icon.icon" (click)="buttonSelected(icon)" />
+    <image-button [icon]="icon.icon" class (click)="buttonSelected(icon)" />
     }
   </div>
   }

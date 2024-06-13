@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Level } from '../interfaces/level';
+import { Difficulty } from '../interfaces/difficulty';
 import { ThemeValue } from '../interfaces/theme';
 import { Icon } from '../interfaces/icon';
 
@@ -7,7 +7,7 @@ import { Icon } from '../interfaces/icon';
   providedIn: 'root',
 })
 export class PlayService {
-  private difficulty: Level | null = null;
+  private difficulty: Difficulty | null = null;
   private theme: ThemeValue | null = null;
   private iconSequence: Icon[] = [];
 
@@ -16,7 +16,7 @@ export class PlayService {
   getDifficulty() {
     return this.difficulty;
   }
-  setDifficulty(difficulty: Level) {
+  setDifficulty(difficulty: Difficulty) {
     this.difficulty = difficulty;
   }
 

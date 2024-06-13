@@ -9,7 +9,7 @@
       <mat-label>Difficulty</mat-label>
       <mat-select [(ngModel)]="selectedLevel" name="levels">
         @for (level of levels; track level) {
-        <mat-option [value]="level">{{ level }}</mat-option>
+        <mat-option [value]="level">{{ level.levelDisplay }}</mat-option>
         }
       </mat-select>
     </mat-form-field>

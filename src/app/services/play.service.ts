@@ -43,8 +43,19 @@ export class PlayService {
     return this.iconSequence.length;
   }
 
+  previousIconAdded: Icon | null = null;
   addRandomToIconSequence(icons: Icon[]) {
-    this.iconSequence.push(icons[Math.floor(Math.random() * icons.length)]);
+    let iconToAdd: Icon | null = null;
+    let isPrev = true;
+    while(isPrev) {
+      iconToAdd = icons[Math.floor(Math.random() * icons.length)];
+      isPrev = iconToAdd === this.previousIconAdded ? true : false;
+    }
+    if(iconToAdd) {
+      this.previousIconAdded = iconToAdd;
+      this.iconSequence.push(iconToAdd);
+    }
+    
   }
 
   compareChosenToIconSequence(chosenIcon: Icon, chosenIndex: number) {

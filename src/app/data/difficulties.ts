@@ -25,8 +25,8 @@ export const Levels: Difficulty[] = [
   {
     levelDisplay: 'Expert',
     iconCount: 10,
-    flickerSpeedMs: 500,
-    initialAmountOfIcons: 5,
+    flickerSpeedMs: 750,
+    initialAmountOfIcons: 4,
     iconRoundIncrement: 2,
   },
 ];

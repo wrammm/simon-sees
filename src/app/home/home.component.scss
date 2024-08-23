@@ -3,3 +3,19 @@
   flex-direction: column;
   align-items: center;
 }
+
+.heading {
+  $icon-size: 100px;
+  .icon-container {
+    text-align: center;
+    mat-icon {
+      font-size: $icon-size;
+      width: $icon-size;
+      height: $icon-size;
+    }
+  }
+
+  h1 {
+    margin-top: 0px;
+  }
+}

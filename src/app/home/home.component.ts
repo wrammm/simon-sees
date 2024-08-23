@@ -9,6 +9,7 @@ import { Difficulty } from '../interfaces/difficulty';
 import { PlayService } from '../services/play.service';
 import { ThemeValue, Theme } from '../interfaces/theme';
 import { Levels } from '../data/difficulties';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'home',
@@ -19,6 +20,7 @@ import { Levels } from '../data/difficulties';
     MatFormFieldModule,
     MatSelectModule,
     MatInputModule,
+    MatIconModule,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
